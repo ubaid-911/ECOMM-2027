@@ -1,0 +1,32 @@
+
+@keyframes supportFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes supportPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(18px);
+  }
+  70% {
+    transform: scale(1.015) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes supportShimmer {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
