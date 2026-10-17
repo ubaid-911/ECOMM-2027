@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Wireless Bluetooth Headphones",
+    "discription": "Over-ear wireless headphones with deep bass, noise isolation, and 30-hour battery life.",
+    "rating": 5,
+    "price": 2499,
+    "images": [
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944",
+      "https://images.unsplash.com/photo-1583394838336-acd977736f90"
+    ]
+  },
+  {
+    "id": 2,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Smart Watch Series X",
+    "discription": "Smartwatch featuring heart rate monitoring, sleep tracking, fitness modes, and notifications.",
+    "rating": 4,
+    "price": 3999,
+    "images": [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+      "https://images.unsplash.com/photo-1546868871-7041f2a55e12",
+      "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d",
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1"
+    ]
+  },
+  {
+    "id": 3,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Running Shoes",
+    "discription": "Lightweight running shoes with breathable mesh, cushioned soles, and a comfortable fit.",
+    "rating": 5,
+    "price": 1999,
+    "images": [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+      "https://images.unsplash.com/photo-1460353581641-37baddab0fa2",
+      "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3",
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3"
+    ]
+  },
+  {
+    "id": 4,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Classic Leather Backpack",
+    "discription": "Stylish everyday backpack with multiple compartments, durable materials, and a laptop sleeve.",
+    "rating": 4,
+    "price": 1799,
+    "images": [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62",
+      "https://images.unsplash.com/photo-1622560480654-d96214fdc887",
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa",
+      "https://images.unsplash.com/photo-1581605405669-fcdf81165afa"
+    ]
+  },
+  {
+    "id": 5,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Premium Sunglasses",
+    "discription": "Modern UV-protection sunglasses designed for everyday wear and outdoor activities.",
+    "rating": 4,
+    "price": 999,
+    "images": [
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083",
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083",
+      "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9",
+      "https://images.unsplash.com/photo-1508296695146-257a814070b4"
+    ]
+  },
+  {
+    "id": 6,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Mechanical Gaming Keyboard",
+    "discription": "RGB mechanical keyboard with responsive switches, customizable lighting, and a durable design.",
+    "rating": 5,
+    "price": 2999,
+    "images": [
+      "https://images.unsplash.com/photo-1595225476474-87563907a212",
+      "https://images.unsplash.com/photo-1595225476474-87563907a212",
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3",
+      "https://images.unsplash.com/photo-1541140532154-b024d705b90a",
+      "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef"
+    ]
+  },
+  {
+    "id": 7,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Portable Bluetooth Speaker",
+    "discription": "Compact wireless speaker with powerful sound, rechargeable battery, and portable design.",
+    "rating": 4,
+    "price": 1499,
+    "images": [
+      "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1",
+      "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1",
+      "https://images.unsplash.com/photo-1608156639585-b3a032ef9689",
+      "https://images.unsplash.com/photo-1589003077984-894e133dabab",
+      "https://images.unsplash.com/photo-1545454675-3531b543be5d"
+    ]
+  },
+  {
+    "id": 8,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Ceramic Coffee Mug",
+    "discription": "Minimalist ceramic coffee mug suitable for coffee, tea, and other hot beverages.",
+    "rating": 4,
+    "price": 399,
+    "images": [
+      "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d",
+      "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+      "https://images.unsplash.com/photo-1445116572660-236099ec97a0"
+    ]
+  },
+  {
+    "id": 9,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Stainless Steel Water Bottle",
+    "discription": "Reusable insulated water bottle designed to keep drinks hot or cold for hours.",
+    "rating": 5,
+    "price": 699,
+    "images": [
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8",
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8",
+      "https://images.unsplash.com/photo-1523362628745-0c100150b504",
+      "https://images.unsplash.com/photo-1608270586620-248524c67de9",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62"
+    ]
+  },
+  {
+    "id": 10,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Minimalist Desk Lamp",
+    "discription": "Modern desk lamp providing comfortable lighting for reading, studying, and working.",
+    "rating": 4,
+    "price": 1299,
+    "images": [
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c",
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c",
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c",
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c",
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c"
+    ]
+  },
+  {
+    "id": 11,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Cotton Casual T-Shirt",
+    "discription": "Soft breathable cotton T-shirt with a regular fit for casual everyday outfits.",
+    "rating": 4,
+    "price": 599,
+    "images": [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+      "https://images.unsplash.com/photo-1503341504253-dff4815485f1",
+      "https://images.unsplash.com/photo-1527719327859-c6ce80353573",
+      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a"
+    ]
+  },
+  {
+    "id": 12,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Classic Wrist Watch",
+    "discription": "Elegant analog wristwatch with a minimalist dial and a comfortable strap.",
+    "rating": 5,
+    "price": 2299,
+    "images": [
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d",
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d",
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49",
+      "https://images.unsplash.com/photo-1524592094714-0f0654e20314",
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1"
+    ]
+  },
+  {
+    "id": 13,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Laptop Sleeve 15 Inch",
+    "discription": "Protective laptop sleeve with soft inner padding and a slim, portable profile.",
+    "rating": 4,
+    "price": 799,
+    "images": [
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853",
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed"
+    ]
+  },
+  {
+    "id": 14,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Wireless Gaming Mouse",
+    "discription": "Ergonomic wireless mouse with adjustable sensitivity, precision tracking, and programmable buttons.",
+    "rating": 5,
+    "price": 1199,
+    "images": [
+      "https://images.unsplash.com/photo-1527814050087-3793815479db",
+      "https://images.unsplash.com/photo-1527814050087-3793815479db",
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7",
+      "https://images.unsplash.com/photo-1613141411244-0e4ac259d217",
+      "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf"
+    ]
+  },
+  {
+    "id": 15,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Travel Duffel Bag",
+    "discription": "Spacious travel duffel bag with sturdy handles, a shoulder strap, and organized storage.",
+    "rating": 4,
+    "price": 1599,
+    "images": [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62",
+      "https://images.unsplash.com/photo-1547949003-9792a18a2601",
+      "https://images.unsplash.com/photo-1622560480654-d96214fdc887",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62"
+    ]
+  },
+  {
+    "id": 16,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Polarized Sports Sunglasses",
+    "discription": "Lightweight sports sunglasses with polarized lenses for outdoor adventures and driving.",
+    "rating": 4,
+    "price": 1299,
+    "images": [
+      "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a",
+      "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a",
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083",
+      "https://images.unsplash.com/photo-1508296695146-257a814070b4",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9"
+    ]
+  },
+  {
+    "id": 17,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Wireless Charging Pad",
+    "discription": "Compact wireless charging pad with a non-slip surface and a sleek modern finish.",
+    "rating": 4,
+    "price": 899,
+    "images": [
+      "https://images.unsplash.com/photo-1586953208448-b95a79798f07",
+      "https://images.unsplash.com/photo-1586953208448-b95a79798f07",
+      "https://images.unsplash.com/photo-1591290619762-c588b9c9a8f0",
+      "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+    ]
+  },
+  {
+    "id": 18,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Modern Table Clock",
+    "discription": "Contemporary tabletop clock with a clear display and a minimalist design for home or office.",
+    "rating": 4,
+    "price": 749,
+    "images": [
+      "https://images.unsplash.com/photo-1508057198894-247b23fe5ade",
+      "https://images.unsplash.com/photo-1508057198894-247b23fe5ade",
+      "https://images.unsplash.com/photo-1501139083538-0139583c060f",
+      "https://images.unsplash.com/photo-1495366811353-7b5e4c7b4e6b",
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c"
+    ]
+  },
+  {
+    "id": 19,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Yoga Exercise Mat",
+    "discription": "Non-slip exercise mat offering cushioning and stability for yoga, stretching, and home workouts.",
+    "rating": 5,
+    "price": 999,
+    "images": [
+      "https://images.unsplash.com/photo-1592432678016-e910b452f9a2",
+      "https://images.unsplash.com/photo-1592432678016-e910b452f9a2",
+      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b",
+      "https://images.unsplash.com/photo-1518611012118-696072aa579a",
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773"
+    ]
+  },
+  {
+    "id": 20,
+    "created_at": "2026-10-17T06:00:00Z",
+    "name": "Indoor Decorative Plant",
+    "discription": "Decorative indoor plant for adding a natural touch to living rooms, desks, and office spaces.",
+    "rating": 4,
+    "price": 549,
+    "images": [
+      "https://images.unsplash.com/photo-1485955900006-10f4d324d411",
+      "https://images.unsplash.com/photo-1485955900006-10f4d324d411",
+      "https://images.unsplash.com/photo-1501004318641-b39e6451bec6",
+      "https://images.unsplash.com/photo-1497250681960-ef046c08a56e",
+      "https://images.unsplash.com/photo-1509423350716-97f9360b4e09"
+    ]
+  }
+]      

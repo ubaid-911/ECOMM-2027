@@ -1,68 +1,65 @@
+import { useEffect, useState } from "react";
+import { Star, ShoppingCart, ArrowRight, Heart, Check } from "lucide-react";
+import { useProductsStore } from "../store/productsStore";
 
-import { useState } from "react";
-import {
-  Star,
-  ShoppingCart,
-  ArrowRight,
-  Heart,
-  Check,
-} from "lucide-react";
-
-const products = [
-  {
-    id: 1,
-    title: "Premium Wireless Headphones",
-    category: "Audio",
-    price: 2499,
-    oldPrice: 3499,
-    rating: 4.8,
-    reviews: 124,
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
-    badge: "BESTSELLER",
-  },
-  {
-    id: 2,
-    title: "Minimal Classic Watch",
-    category: "Accessories",
-    price: 1899,
-    oldPrice: 2599,
-    rating: 4.6,
-    reviews: 89,
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85",
-    badge: "POPULAR",
-  },
-  {
-    id: 3,
-    title: "Everyday Travel Backpack",
-    category: "Lifestyle",
-    price: 1499,
-    oldPrice: 1999,
-    rating: 4.7,
-    reviews: 76,
-    image:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85",
-    badge: "TRENDING",
-  },
-  {
-    id: 4,
-    title: "Sport Edition Sneakers",
-    category: "Footwear",
-    price: 2199,
-    oldPrice: 2999,
-    rating: 4.9,
-    reviews: 156,
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
-    badge: "TOP RATED",
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     title: "Premium Wireless Headphones",
+//     category: "Audio",
+//     price: 2499,
+//     oldPrice: 3499,
+//     rating: 4.8,
+//     reviews: 124,
+//     image:
+//       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
+//     badge: "BESTSELLER",
+//   },
+//   {
+//     id: 2,
+//     title: "Minimal Classic Watch",
+//     category: "Accessories",
+//     price: 1899,
+//     oldPrice: 2599,
+//     rating: 4.6,
+//     reviews: 89,
+//     image:
+//       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85",
+//     badge: "POPULAR",
+//   },
+//   {
+//     id: 3,
+//     title: "Everyday Travel Backpack",
+//     category: "Lifestyle",
+//     price: 1499,
+//     oldPrice: 1999,
+//     rating: 4.7,
+//     reviews: 76,
+//     image:
+//       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85",
+//     badge: "TRENDING",
+//   },
+//   {
+//     id: 4,
+//     title: "Sport Edition Sneakers",
+//     category: "Footwear",
+//     price: 2199,
+//     oldPrice: 2999,
+//     rating: 4.9,
+//     reviews: 156,
+//     image:
+//       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
+//     badge: "TOP RATED",
+//   },
+// ];
 
 const AllProducts = () => {
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [addedProduct, setAddedProduct] = useState(null);
+
+  const products = useProductsStore((state)=> state.products);
+  const getProducts = useProductsStore((state)=> state.getProducts) 
 
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-IN", {
@@ -76,17 +73,13 @@ const AllProducts = () => {
     setAddedProduct(product.id);
 
     setTimeout(() => {
-      setAddedProduct((prev) =>
-        prev === product.id ? null : prev
-      );
+      setAddedProduct((prev) => (prev === product.id ? null : prev));
     }, 1500);
   };
 
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
@@ -95,10 +88,15 @@ const AllProducts = () => {
     // Add your checkout navigation here.
   };
 
+  console.log(products)
+
+  useEffect(()=>{
+    getProducts();
+  },[])
+
   return (
     <section className="min-h-screen bg-[#0b0b0f] px-4 py-12 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-
         {/* Section Heading */}
         <div className="mb-8">
           <div className="mb-2 flex items-center gap-2">
@@ -127,15 +125,15 @@ const AllProducts = () => {
               {/* Product Image */}
               <div className="relative m-2 overflow-hidden rounded-xl bg-[#191920]">
                 <img
-                  src={product.image}
-                  alt={product.title}
+                  src={product.images[0]}
+                  alt={product.name}
                   loading="lazy"
                   className="h-56 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-52"
                 />
 
-                <span className="absolute left-3 top-3 rounded-md border border-violet-400/20 bg-[#171322]/95 px-2 py-1 text-[9px] font-bold tracking-wider text-violet-300">
+                {/* <span className="absolute left-3 top-3 rounded-md border border-violet-400/20 bg-[#171322]/95 px-2 py-1 text-[9px] font-bold tracking-wider text-violet-300">
                   {product.badge}
-                </span>
+                </span> */}
 
                 {/* Favorite */}
                 <button
@@ -150,9 +148,7 @@ const AllProducts = () => {
                   <Heart
                     size={17}
                     fill={
-                      favorites.includes(product.id)
-                        ? "currentColor"
-                        : "none"
+                      favorites.includes(product.id) ? "currentColor" : "none"
                     }
                   />
                 </button>
@@ -160,14 +156,15 @@ const AllProducts = () => {
 
               {/* Product Details */}
               <div className="p-4 pt-2">
-                <p className="text-xs font-medium text-violet-400">
-                  {product.category}
-                </p>
+            
 
                 <h2 className="mt-2 min-h-10 text-sm font-semibold leading-5 text-gray-100 transition group-hover:text-violet-300">
-                  {product.title}
+                  {product.name}
                 </h2>
 
+    <p className="text-xs font-medium text-violet-400 line-clamp-1">
+                  {product.discription}
+                </p>
                 {/* Dynamic Rating */}
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex items-center gap-0.5">
@@ -190,9 +187,9 @@ const AllProducts = () => {
                     {product.rating.toFixed(1)}
                   </span>
 
-                  <span className="text-xs text-gray-600">
+                  {/* <span className="text-xs text-gray-600">
                     ({product.reviews})
-                  </span>
+                  </span> */}
                 </div>
 
                 {/* Price */}
@@ -201,9 +198,9 @@ const AllProducts = () => {
                     {formatPrice(product.price)}
                   </span>
 
-                  <span className="text-xs text-gray-500 line-through">
+                  {/* <span className="text-xs text-gray-500 line-through">
                     {formatPrice(product.oldPrice)}
-                  </span>
+                  </span> */}
                 </div>
 
                 {/* Action Buttons */}
@@ -256,7 +253,6 @@ const AllProducts = () => {
             </a>
           </div>
         )}
-
       </div>
     </section>
   );

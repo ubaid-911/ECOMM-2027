@@ -3,7 +3,7 @@ import axios from "axios"
 
 const API_URL = "http://localhost:5000/api/v1/order";
 
-export const useOrderStore = (set)=>({
+export const useOrderStore = create((set)=>({
 
     order:[],
     getOrder:async()=>{
@@ -59,4 +59,4 @@ export const useOrderStore = (set)=>({
 
 
 
-})
+}))

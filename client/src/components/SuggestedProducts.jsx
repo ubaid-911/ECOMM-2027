@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Star,
   ShoppingCart,
@@ -8,62 +8,70 @@ import {
   Eye,
   Check,
 } from "lucide-react";
+import { useProductsStore } from "../store/productsStore";
+import { useCartStore } from "../store/cartStore";
 
-const products = [
-  {
-    id: 1,
-    title: "Premium Wireless Headphones",
-    category: "Audio",
-    price: 2499,
-    oldPrice: 3499,
-    rating: 4.8,
-    reviews: 124,
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
-    badge: "BESTSELLER",
-  },
-  {
-    id: 2,
-    title: "Minimal Classic Watch",
-    category: "Accessories",
-    price: 1899,
-    oldPrice: 2599,
-    rating: 4.6,
-    reviews: 89,
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85",
-    badge: "POPULAR",
-  },
-  {
-    id: 3,
-    title: "Everyday Travel Backpack",
-    category: "Lifestyle",
-    price: 1499,
-    oldPrice: 1999,
-    rating: 4.7,
-    reviews: 76,
-    image:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85",
-    badge: "TRENDING",
-  },
-  {
-    id: 4,
-    title: "Sport Edition Sneakers",
-    category: "Footwear",
-    price: 2199,
-    oldPrice: 2999,
-    rating: 4.9,
-    reviews: 156,
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
-    badge: "TOP RATED",
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     title: "Premium Wireless Headphones",
+//     category: "Audio",
+//     price: 2499,
+//     oldPrice: 3499,
+//     rating: 4.8,
+//     reviews: 124,
+//     image:
+//       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
+//     badge: "BESTSELLER",
+//   },
+//   {
+//     id: 2,
+//     title: "Minimal Classic Watch",
+//     category: "Accessories",
+//     price: 1899,
+//     oldPrice: 2599,
+//     rating: 4.6,
+//     reviews: 89,
+//     image:
+//       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85",
+//     badge: "POPULAR",
+//   },
+//   {
+//     id: 3,
+//     title: "Everyday Travel Backpack",
+//     category: "Lifestyle",
+//     price: 1499,
+//     oldPrice: 1999,
+//     rating: 4.7,
+//     reviews: 76,
+//     image:
+//       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=85",
+//     badge: "TRENDING",
+//   },
+//   {
+//     id: 4,
+//     title: "Sport Edition Sneakers",
+//     category: "Footwear",
+//     price: 2199,
+//     oldPrice: 2999,
+//     rating: 4.9,
+//     reviews: 156,
+//     image:
+//       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
+//     badge: "TOP RATED",
+//   },
+// ];
+
 
 const SuggestedProducts = () => {
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [addedProduct, setAddedProduct] = useState(null);
+
+  const products = useProductsStore((state)=> state.products);
+  const getProducts = useProductsStore((state)=> state.getProducts);
+  const userData = JSON.parse(localStorage.getItem("profile"))
+  const createCart = useCartStore((state)=> state.createCart);
 
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-IN", {
@@ -75,6 +83,17 @@ const SuggestedProducts = () => {
   const addToCart = (product) => {
     setCart((prev) => [...prev, product.id]);
     setAddedProduct(product.id);
+    
+
+    const cartData = {
+
+    "productId":product?.id,
+    "userId":userData?.result?.id
+
+    }
+
+    createCart(cartData);
+
 
     setTimeout(() => {
       setAddedProduct((prev) =>
@@ -82,6 +101,7 @@ const SuggestedProducts = () => {
       );
     }, 1500);
   };
+
 
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
@@ -95,6 +115,13 @@ const SuggestedProducts = () => {
     console.log("Buy now:", product);
     // Navigate to your product checkout page here.
   };
+
+  useEffect(()=>{
+    getProducts()
+
+  },[])
+
+  console.log(products,"Suggested")
 
   return (
     <section className="bg-[#0b0b0f] px-4 py-12 text-white sm:px-6 lg:px-8">
@@ -134,7 +161,7 @@ const SuggestedProducts = () => {
         {/* Product Grid */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
-          {products.map((product) => (
+          {products.slice(2,6).map((product) => (
             <article
               key={product.id}
               className="group overflow-hidden rounded-2xl border border-white/[0.08] bg-[#101014] transition duration-300 hover:-translate-y-1 hover:border-violet-500/30 hover:shadow-xl hover:shadow-violet-950/20"
@@ -143,20 +170,20 @@ const SuggestedProducts = () => {
               <div className="relative m-2 overflow-hidden rounded-xl bg-[#191920]">
                 <a
                   href={`/products/${product.id}`}
-                  aria-label={`View ${product.title}`}
+                  aria-label={`View ${product.name}`}
                 >
                   <img
-                    src={product.image}
-                    alt={product.title}
+                    src={product.images[0]}
+                    alt={product.name}
                     loading="lazy"
                     className="h-56 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-52"
                   />
                 </a>
 
                 {/* Product Badge */}
-                <span className="absolute left-3 top-3 rounded-md border border-violet-400/20 bg-[#171322]/95 px-2 py-1 text-[9px] font-bold tracking-wider text-violet-300">
+                {/* <span className="absolute left-3 top-3 rounded-md border border-violet-400/20 bg-[#171322]/95 px-2 py-1 text-[9px] font-bold tracking-wider text-violet-300">
                   {product.badge}
-                </span>
+                </span> */}
 
                 {/* Favorite Button */}
                 <button
@@ -185,7 +212,7 @@ const SuggestedProducts = () => {
                 {/* Quick View */}
                 <a
                   href={`/products/${product.id}`}
-                  aria-label={`Quick view ${product.title}`}
+                  aria-label={`Quick view ${product.name}`}
                   className="absolute bottom-3 right-3 flex h-9 w-9 translate-y-3 items-center justify-center rounded-full border border-white/10 bg-black/70 text-white opacity-0 backdrop-blur-md transition duration-300 hover:bg-violet-600 group-hover:translate-y-0 group-hover:opacity-100"
                 >
                   <Eye size={17} />
@@ -194,14 +221,15 @@ const SuggestedProducts = () => {
 
               {/* Product Details */}
               <div className="p-4 pt-2">
-                <p className="text-xs font-medium text-violet-400">
-                  {product.category}
-                </p>
+           
 
                 <h3 className="mt-2 min-h-10 text-sm font-semibold leading-5 text-gray-100 transition group-hover:text-violet-300">
-                  {product.title}
+                  {product.name}
                 </h3>
 
+                <p className="text-xs font-medium text-violet-400 line-clamp-1 ">
+                  {product.discription}
+                </p>
                 {/* Dynamic Rating */}
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex items-center gap-0.5">
@@ -224,9 +252,9 @@ const SuggestedProducts = () => {
                     {product.rating.toFixed(1)}
                   </span>
 
-                  <span className="text-xs text-gray-600">
+                  {/* <span className="text-xs text-gray-600">
                     ({product.reviews})
-                  </span>
+                  </span> */}
                 </div>
 
                 {/* Price */}
@@ -235,9 +263,9 @@ const SuggestedProducts = () => {
                     {formatPrice(product.price)}
                   </span>
 
-                  <span className="text-xs text-gray-500 line-through">
+                  {/* <span className="text-xs text-gray-500 line-through">
                     {formatPrice(product.oldPrice)}
-                  </span>
+                  </span> */}
                 </div>
 
                 {/* Action Buttons */}

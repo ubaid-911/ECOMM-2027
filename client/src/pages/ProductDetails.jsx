@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Star,
   ShoppingCart,
@@ -16,31 +15,35 @@ import {
   ShoppingBag,
   Headphones,
   Sparkles,
+
 } from "lucide-react";
 import PromoHero from "../components/PromoHero";
+import { useProductsStore } from "../store/productsStore";
+import { useParams } from "react-router-dom";
+import Loader from "../components/Loder";
 
-const product = {
-  id: 1,
-  title: "Premium Wireless Headphones",
-  category: "Audio & Accessories",
-  price: 2499,
-  oldPrice: 3499,
-  rating: 4.8,
-  reviews: 124,
-  description:
-    "Experience exceptional sound with premium wireless headphones designed for everyday comfort. Enjoy immersive audio, powerful bass, advanced noise isolation, and a long-lasting battery in a sleek, modern design.",
-  colors: [
-    { name: "Black", value: "#171717" },
-    { name: "Violet", value: "#8b5cf6" },
-    { name: "Silver", value: "#cbd5e1" },
-  ],
-  images: [
-    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=85",
-    "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1000&q=85",
-    "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1000&q=85",
-    "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=85",
-  ],
-};
+// const product = {
+//   id: 1,
+//   title: "Premium Wireless Headphones",
+//   category: "Audio & Accessories",
+//   price: 2499,
+//   oldPrice: 3499,
+//   rating: 4.8,
+//   reviews: 124,
+//   description:
+//     "Experience exceptional sound with premium wireless headphones designed for everyday comfort. Enjoy immersive audio, powerful bass, advanced noise isolation, and a long-lasting battery in a sleek, modern design.",
+//   colors: [
+//     { name: "Black", value: "#171717" },
+//     { name: "Violet", value: "#8b5cf6" },
+//     { name: "Silver", value: "#cbd5e1" },
+//   ],
+//   images: [
+//     "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=85",
+//     "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1000&q=85",
+//     "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1000&q=85",
+//     "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=85",
+//   ],
+// };
 
 const similarProducts = [
   {
@@ -101,6 +104,14 @@ const ProductDetails = () => {
   const [cart, setCart] = useState([]);
   const [addedProduct, setAddedProduct] = useState(null);
 
+  const { id } = useParams();
+  const singleProducts = useProductsStore((state) => state.singleProducts);
+  const getProductsById = useProductsStore((state) => state.getProductsById);
+  useEffect(() => {
+    if (id) {
+      getProductsById(id);
+    }
+  }, [id, getProductsById]);
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -119,12 +130,12 @@ const ProductDetails = () => {
 
   const previousImage = () => {
     setActiveImage(
-      (prev) => (prev - 1 + product.images.length) % product.images.length
+      (prev) => (prev - 1 + singleProducts.images.length) % singleProducts.images.length,
     );
   };
 
   const nextImage = () => {
-    setActiveImage((prev) => (prev + 1) % product.images.length);
+    setActiveImage((prev) => (prev + 1) % singleProducts.images.length);
   };
 
   const buyNow = (item) => {
@@ -136,13 +147,17 @@ const ProductDetails = () => {
     // Navigate to checkout here.
   };
 
+  console.log(singleProducts, "Single Products");
+  if (!singleProducts) {
+    return (
+     <Loader/>
+    );
+  }
   return (
     <main className="min-h-screen bg-[#0b0b0f] text-white">
-
       {/* Product Details */}
       <section className="px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-auto max-w-7xl">
-
           {/* Breadcrumb */}
           <div className="mb-7 flex flex-wrap items-center gap-2 text-xs text-gray-500 sm:text-sm">
             <a href="/" className="transition hover:text-violet-400">
@@ -152,18 +167,15 @@ const ProductDetails = () => {
             <a href="/products" className="transition hover:text-violet-400">
               Products
             </a>
-            <span>/</span>
-            <span className="text-violet-400">{product.category}</span>
+            {/* <span>/</span> */}
+            {/* <span className="text-violet-400">{product.category}</span> */}
           </div>
 
           <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
-
             {/* LEFT: Animated Image Gallery */}
             <div className="min-w-0">
-
               {/* Main Image */}
               <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#101014] p-3 sm:rounded-3xl sm:p-5">
-
                 <div className="pointer-events-none absolute -right-10 top-10 h-52 w-52 rounded-full bg-violet-600/20 blur-[80px]" />
 
                 <div className="absolute left-5 top-5 z-20 flex items-center gap-1.5 rounded-full border border-violet-400/20 bg-[#171322]/90 px-3 py-1.5 text-[10px] font-bold tracking-wider text-violet-300 backdrop-blur-md">
@@ -180,10 +192,7 @@ const ProductDetails = () => {
                       : "bg-black/40 text-gray-300 hover:bg-violet-600 hover:text-white"
                   }`}
                 >
-                  <Heart
-                    size={19}
-                    fill={favorite ? "currentColor" : "none"}
-                  />
+                  <Heart size={19} fill={favorite ? "currentColor" : "none"} />
                 </button>
 
                 <div className="relative flex h-[300px] items-center justify-center overflow-hidden rounded-xl sm:h-[420px] lg:h-[450px]">
@@ -191,8 +200,8 @@ const ProductDetails = () => {
 
                   <img
                     key={activeImage}
-                    src={product.images[activeImage]}
-                    alt={`${product.title} view ${activeImage + 1}`}
+                    src={singleProducts.images[activeImage]}
+                    alt={`${singleProducts.name} view ${activeImage + 1}`}
                     className="relative z-10 h-full w-full animate-[productFade_0.45s_ease-out] object-contain transition-transform duration-500 group-hover:scale-105"
                   />
 
@@ -214,14 +223,14 @@ const ProductDetails = () => {
                   </button>
 
                   <span className="absolute bottom-3 right-3 z-20 rounded-lg border border-white/10 bg-black/60 px-3 py-1.5 text-xs text-gray-300 backdrop-blur-md">
-                    {activeImage + 1} / {product.images.length}
+                    {activeImage + 1} / {singleProducts.images.length}
                   </span>
                 </div>
               </div>
 
               {/* Thumbnail Gallery */}
               <div className="mt-4 grid grid-cols-4 gap-3">
-                {product.images.map((image, index) => (
+                {singleProducts.images.map((image, index) => (
                   <button
                     key={image}
                     onClick={() => setActiveImage(index)}
@@ -245,14 +254,13 @@ const ProductDetails = () => {
 
             {/* RIGHT: Product Information */}
             <div className="flex flex-col">
-
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-400">
-                {product.category}
-              </p>
-
               <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-                {product.title}
+                {singleProducts.name}
               </h1>
+
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-400 ">
+                {singleProducts.discription}
+              </p>
 
               {/* Rating */}
               <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -262,9 +270,9 @@ const ProductDetails = () => {
                       key={star}
                       size={16}
                       className={
-                        product.rating >= star
+                        singleProducts.rating >= star
                           ? "fill-amber-400 text-amber-400"
-                          : product.rating >= star - 0.5
+                          : singleProducts.rating >= star - 0.5
                             ? "fill-amber-400/50 text-amber-400"
                             : "text-gray-700"
                       }
@@ -273,12 +281,12 @@ const ProductDetails = () => {
                 </div>
 
                 <span className="text-sm font-semibold text-white">
-                  {product.rating}/5
+                  {singleProducts.rating}/5
                 </span>
 
-                <span className="text-sm text-gray-500">
+                {/* <span className="text-sm text-gray-500">
                   ({product.reviews} reviews)
-                </span>
+                </span> */}
 
                 <span className="rounded-md bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400">
                   In Stock
@@ -288,24 +296,24 @@ const ProductDetails = () => {
               {/* Price */}
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <span className="text-3xl font-bold tracking-tight">
-                  {formatPrice(product.price)}
+                  {formatPrice(singleProducts.price)}
                 </span>
 
-                <span className="text-base text-gray-500 line-through">
+                {/* <span className="text-base text-gray-500 line-through">
                   {formatPrice(product.oldPrice)}
-                </span>
+                </span> */}
 
-                <span className="rounded-md bg-violet-500/15 px-2.5 py-1 text-xs font-bold text-violet-300">
+                {/* <span className="rounded-md bg-violet-500/15 px-2.5 py-1 text-xs font-bold text-violet-300">
                   {Math.round(
                     ((product.oldPrice - product.price) / product.oldPrice) *
                       100
                   )}
                   % OFF
-                </span>
+                </span> */}
               </div>
 
               <p className="mt-6 text-sm leading-7 text-gray-400 sm:text-base">
-                {product.description}
+                {singleProducts.description}
               </p>
 
               <div className="my-6 border-t border-white/10" />
@@ -319,7 +327,7 @@ const ProductDetails = () => {
                   </span>
                 </div>
 
-                <div className="mt-4 flex items-center gap-3">
+                {/* <div className="mt-4 flex items-center gap-3">
                   {product.colors.map((color) => (
                     <button
                       key={color.name}
@@ -338,7 +346,7 @@ const ProductDetails = () => {
                       />
                     </button>
                   ))}
-                </div>
+                </div> */}
               </div>
 
               {/* Quantity Selector */}
@@ -347,9 +355,7 @@ const ProductDetails = () => {
 
                 <div className="inline-flex items-center gap-5 rounded-xl border border-white/10 bg-white/[0.03] p-2">
                   <button
-                    onClick={() =>
-                      setQuantity((prev) => Math.max(1, prev - 1))
-                    }
+                    onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
                     disabled={quantity <= 1}
                     aria-label="Decrease quantity"
                     className="rounded-lg p-2 text-gray-300 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
@@ -380,7 +386,7 @@ const ProductDetails = () => {
               {/* Buy & Cart Buttons */}
               <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <button
-                  onClick={() => buyNow(product)}
+                  onClick={() => buyNow(singleProducts)}
                   className="flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-4 text-sm font-semibold text-white shadow-lg shadow-violet-600/20 transition hover:-translate-y-0.5 hover:bg-violet-500"
                 >
                   Buy Now
@@ -388,10 +394,10 @@ const ProductDetails = () => {
                 </button>
 
                 <button
-                  onClick={() => addToCart(product, quantity)}
+                  onClick={() => addToCart(singleProducts, quantity)}
                   className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm font-semibold text-gray-200 transition hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-violet-300"
                 >
-                  {addedProduct === product.id ? (
+                  {addedProduct === singleProducts.id ? (
                     <>
                       <Check size={18} />
                       Added to Cart
@@ -420,10 +426,7 @@ const ProductDetails = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <ShieldCheck
-                    size={20}
-                    className="shrink-0 text-violet-400"
-                  />
+                  <ShieldCheck size={20} className="shrink-0 text-violet-400" />
                   <div>
                     <p className="text-xs font-semibold text-gray-200">
                       Secure Payment
@@ -435,10 +438,7 @@ const ProductDetails = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <RotateCcw
-                    size={20}
-                    className="shrink-0 text-violet-400"
-                  />
+                  <RotateCcw size={20} className="shrink-0 text-violet-400" />
                   <div>
                     <p className="text-xs font-semibold text-gray-200">
                       Easy Returns
@@ -476,7 +476,6 @@ const ProductDetails = () => {
       {/* Similar Products */}
       <section className="border-t border-white/[0.06] bg-[#0b0b0f] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-
           <div className="mb-8">
             <div className="mb-2 flex items-center gap-2">
               <span className="h-1 w-7 rounded-full bg-violet-500" />
@@ -609,9 +608,8 @@ const ProductDetails = () => {
         </div>
       </section>
 
-        <PromoHero/>
-
-    </main> 
+      <PromoHero />
+    </main>
   );
 };
 

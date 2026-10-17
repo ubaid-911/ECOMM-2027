@@ -23,7 +23,7 @@ export const getUserById = async(req,res)=> {
     try {
 
     const {id} = req.params;
-    const {data,error} = await supabase.from("users").eq("id",id).select("*");
+    const {data,error} = await supabase.from("users").select("*").eq("id",id).single();
 
       if(error) {
             return res.status(500).json({message:`These is an ${error}` });

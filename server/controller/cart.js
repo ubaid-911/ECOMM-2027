@@ -9,9 +9,9 @@ export const getCart = async(req,res)=> {
         if(error) {
             return res.status(500).json({message:`These is an ${error}` });
         }
-
+ 
         return res.status(200).json(data);
-        
+          
     } catch (error) {
         console.log(error);
     }
@@ -23,7 +23,7 @@ export const getCartById = async(req,res)=> {
     try {
 
     const {id} = req.params;
-    const {data,error} = await supabase.from("cart").eq("id",id).select("*");
+    const {data,error} = await supabase.from("cart").select("* , products(*), users(*)").eq("id",id).single();
 
       if(error) {
             return res.status(500).json({message:`These is an ${error}` });

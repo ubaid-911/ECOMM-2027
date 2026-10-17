@@ -36,7 +36,7 @@ const Navbar = () => {
             </div>
 
             <span className="text-xl font-bold tracking-tight sm:text-2xl">
-              Q-<span className="text-violet-400">Store</span>
+              Q <span className="text-violet-400">Store</span>
             </span>
           </a>
 

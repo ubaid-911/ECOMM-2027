@@ -6,7 +6,7 @@ export const getOrder = async(req,res)=> {
 
         const {data,error} = await supabase.from("order").select("*");
 
-        if(error) {
+        if(error) { 
             return res.status(500).json({message:`These is an ${error}` });
         }
 
@@ -23,7 +23,7 @@ export const getOrderById = async(req,res)=> {
     try {
 
     const {id} = req.params;
-    const {data,error} = await supabase.from("order").eq("id",id).select("*");
+    const {data,error} = await supabase.from("order").select("* , products(*), users(*)").eq("id",id).single();
 
       if(error) {
             return res.status(500).json({message:`These is an ${error}` });

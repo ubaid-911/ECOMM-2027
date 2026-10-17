@@ -61,6 +61,9 @@ function Cart() {
   const [cartItems, setCartItems] = useState(initialCart);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [placedOrder, setPlacedOrder] = useState(null);
+  
+
+  
 
   const updateQuantity = (id, change) => {
     setCartItems((items) =>

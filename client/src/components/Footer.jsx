@@ -13,7 +13,7 @@ const Footer = () => {
         <a href="/" className="flex items-center gap-2">
           <ShoppingBag size={22} className="text-violet-400" />
           <span className="text-lg font-bold text-white">
-            Q-<span className="text-violet-400">Store</span>
+            Q <span className="text-violet-400">Store</span>
           </span>
         </a>
 

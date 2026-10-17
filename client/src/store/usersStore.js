@@ -3,7 +3,7 @@ import axios from "axios"
 
 const API_URL = "http://localhost:5000/api/v1/users";
 
-export const useUsersStore = (set)=>({
+export const useUsersStore = create((set)=>({
 
     users:[],
     getUsers:async()=>{
@@ -57,4 +57,4 @@ export const useUsersStore = (set)=>({
         }
     }
 
-})
+}))

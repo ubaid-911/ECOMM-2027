@@ -14,16 +14,16 @@ export const getProduct = async(req,res)=> {
         
     } catch (error) {
         console.log(error);
-    }
+    }  
 
-}
+}   
 
 export const getProductById = async(req,res)=> {
 
     try {
 
     const {id} = req.params;
-    const {data,error} = await supabase.from("products").eq("id",id).select("*");
+    const {data,error} = await supabase.from("products").select("*").eq("id",id).single();
 
       if(error) {
             return res.status(500).json({message:`These is an ${error}` });
