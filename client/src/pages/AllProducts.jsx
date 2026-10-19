@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star, ShoppingCart, ArrowRight, Heart, Check } from "lucide-react";
 import { useProductsStore } from "../store/productsStore";
+import { useCartStore } from "../store/cartStore";
 
 // const products = [
 //   {
@@ -60,6 +61,8 @@ const AllProducts = () => {
 
   const products = useProductsStore((state)=> state.products);
   const getProducts = useProductsStore((state)=> state.getProducts) 
+  const userData = JSON.parse(localStorage.getItem("profile"))
+  const createCart = useCartStore((state)=> state.createCart)
 
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-IN", {
@@ -71,6 +74,15 @@ const AllProducts = () => {
   const addToCart = (product) => {
     setCart((prev) => [...prev, product.id]);
     setAddedProduct(product.id);
+
+        const cartData = {
+      "productId":product?.id,
+      "userId":userData?.result?.id,
+      "quantity":1
+
+    }
+
+    createCart(cartData)
 
     setTimeout(() => {
       setAddedProduct((prev) => (prev === product.id ? null : prev));

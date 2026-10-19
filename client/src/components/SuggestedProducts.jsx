@@ -88,7 +88,8 @@ const SuggestedProducts = () => {
     const cartData = {
 
     "productId":product?.id,
-    "userId":userData?.result?.id
+    "userId":userData?.result?.id,
+     "quantity":1
 
     }
 

@@ -118,6 +118,7 @@ export default function Auth() {
   const previewUrlRef = useRef("");
   const navigate = useNavigate();
   const signUp = useAuthStore((state) => state.signUp);
+  const signIn = useAuthStore((state) => state.signIn);
 
   function clearPreviewUrl() {
     if (previewUrlRef.current) {
@@ -267,6 +268,9 @@ export default function Auth() {
     try {
       // Sign-in also reads email/password from the same formData state.
       // Connect your sign-in Zustand action here when it is available.
+
+      await signIn(formData);
+      navigate("/");
       console.log("Sign-in formData:", formData);
       setMessage("Connect your sign-in Zustand action to complete sign-in.");
     } catch (error) {

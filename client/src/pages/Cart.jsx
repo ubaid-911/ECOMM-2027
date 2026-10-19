@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ShoppingBag,
   Minus,
@@ -17,36 +16,15 @@ import {
   X,
   Sparkles,
 } from "lucide-react";
-
-const initialCart = [
-  {
-    id: 1,
-    name: "Premium Smart Watch",
-    category: "Wearables",
-    price: 4999,
-    oldPrice: 6999,
-    quantity: 1,
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600",
-  },
-  {
-    id: 2,
-    name: "Wireless Headphones",
-    category: "Audio",
-    price: 2499,
-    oldPrice: 3499,
-    quantity: 2,
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600",
-  },
-];
+import { useCartStore } from "../store/cartStore";
+import { useOrderStore } from "../store/orderStore";
 
 const formatPrice = (price) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
-  }).format(price);
+  }).format(price || 0);
 
 const confettiColors = [
   "#a78bfa",
@@ -58,73 +36,115 @@ const confettiColors = [
 ];
 
 function Cart() {
-  const [cartItems, setCartItems] = useState(initialCart);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [placedOrder, setPlacedOrder] = useState(null);
-  
+  const userCartData = useCartStore((state) => state.userCartData);
+  const getCartByUserId = useCartStore((state) => state.getCartByUserId);
+  const removeCartItem = useCartStore((state) => state.removeCartItem);
+  const updateCart = useCartStore((state) => state.updateCart);
+  const profile = JSON.parse(localStorage.getItem("profile"));
+  const createOrder = useOrderStore((state) => state.createOrder);
 
-  
+  useEffect(() => {
+    if (profile) {
+      try {
+        if (profile?.result?.id) {
+          getCartByUserId(profile?.result?.id);
+        }
+      } catch (error) {
+        console.error("Unable to read user profile:", error);
+      }
+    }
+  }, [getCartByUserId]);
+  console.log(userCartData, "I am user Cart ");
 
-  const updateQuantity = (id, change) => {
-    setCartItems((items) =>
-      items
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantity: item.quantity + change }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const removeItem = (id) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
-
-  // Automatic price calculations
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
+  // All calculations use Zustand cart data.
+  const subtotal = userCartData.reduce(
+    (total, item) =>
+      total + Number(item?.products?.price || 0) * Number(item?.quantity || 1),
+    0,
   );
 
-  const originalTotal = cartItems.reduce(
-    (total, item) => total + item.oldPrice * item.quantity,
-    0
+  const originalTotal = userCartData.reduce(
+    (total, item) =>
+      total +
+      Number(item?.products?.oldPrice ?? item?.products?.price ?? 0) *
+        Number(item?.quantity || 1),
+    0,
   );
 
-  const discount = originalTotal - subtotal;
+  const discount = Math.max(0, originalTotal - subtotal);
+
   const delivery = subtotal === 0 || subtotal >= 999 ? 0 : 99;
+
   const total = subtotal + delivery;
 
-  const totalQuantity = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
+  const totalQuantity = userCartData.reduce(
+    (total, item) => total + Number(item?.quantity || 1),
+    0,
   );
 
-  // Show order success popup
+  // Separate function for increasing quantity.
+  const handleIncrease = (cartItemId, quantity) => {
+    if (quantity < 1) {
+      return;
+    }
+    updateCart(cartItemId, { quantity: quantity + 1 });
+  };
+
+  // Separate function for decreasing quantity.
+  const handleDecrease = (cartItemId, quantity) => {
+    if (quantity < 1) {
+      return;
+    }
+    updateCart(cartItemId, { quantity: quantity - 1 });
+  };
+
+  // Remove the cart row, not the product itself.
+  const handleRemove = (cartItemId) => {
+    removeCartItem(cartItemId);
+  };
+
   const handleCheckout = () => {
-    if (cartItems.length === 0) return;
+    if (userCartData.length === 0) return;
+
+    const myOrderData = {
+      userId: profile?.result?.id,
+
+      products: userCartData.map((item) => ({
+        productsData: {
+          ...item.products,
+          quantity: item.quantity,
+        },
+      })),
+    };
+    createOrder(myOrderData);
+    console.log(myOrderData);
 
     setPlacedOrder({
       total,
       quantity: totalQuantity,
-      items: cartItems,
+      items: [...userCartData],
     });
 
     setOrderPlaced(true);
   };
 
-  // Close popup and reset cart after the simulated order
-  const closeOrderPopup = () => {
+  const closeOrderPopup = async () => {
     setOrderPlaced(false);
-    setCartItems([]);
+
+    if (placedOrder) {
+      await Promise.all(
+        placedOrder.items.map((item) => removeCartItem(item.id)),
+      );
+    }
+
     setPlacedOrder(null);
   };
 
   return (
     <div className="min-h-screen bg-[#0b0b0f] text-white px-4 sm:px-6 lg:px-10 py-8 sm:py-12">
       <div className="max-w-7xl mx-auto">
-
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
@@ -132,13 +152,11 @@ function Cart() {
               NOVASTORE / CART
             </p>
 
-            <h1 className="text-3xl sm:text-4xl font-bold">
-              Shopping Cart
-            </h1>
+            <h1 className="text-3xl sm:text-4xl font-bold">Shopping Cart</h1>
 
             <p className="text-gray-400 mt-2">
-              {totalQuantity}{" "}
-              {totalQuantity === 1 ? "item" : "items"} in your cart
+              {totalQuantity} {totalQuantity === 1 ? "item" : "items"} in your
+              cart
             </p>
           </div>
 
@@ -151,20 +169,18 @@ function Cart() {
           </a>
         </div>
 
-        {cartItems.length === 0 ? (
-          /* Empty Cart */
+        {/* Empty Cart */}
+        {userCartData.length === 0 ? (
           <div className="min-h-[400px] flex flex-col items-center justify-center text-center bg-[#101014] border border-white/10 rounded-3xl p-8">
             <div className="w-20 h-20 rounded-2xl bg-violet-500/10 flex items-center justify-center mb-5">
               <ShoppingBag size={38} className="text-violet-400" />
             </div>
 
-            <h2 className="text-2xl font-bold mb-2">
-              Your cart is empty
-            </h2>
+            <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
 
             <p className="text-gray-400 max-w-sm mb-7">
-              Looks like you haven't added anything to your cart yet.
-              Discover something you'll love.
+              Looks like you haven't added anything to your cart yet. Discover
+              something you'll love.
             </p>
 
             <a
@@ -176,21 +192,23 @@ function Cart() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-7">
-
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
-              {cartItems.map((item) => (
+              {userCartData.map((item) => (
                 <div
                   key={item.id}
-                  className="group bg-[#101014] border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-violet-500/40 transition duration-300 animate-[promoFade_0.5s_ease-out]"
+                  className="group bg-[#101014] border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-violet-500/40 transition duration-300"
                 >
                   <div className="flex gap-4 sm:gap-6">
-
                     {/* Product Image */}
                     <div className="w-28 h-32 sm:w-40 sm:h-40 shrink-0 rounded-xl bg-[#191920] overflow-hidden">
                       <img
-                        src={item.image}
-                        alt={item.name}
+                        src={
+                          Array.isArray(item?.products?.images)
+                            ? item.products.images[0]
+                            : item?.products?.images
+                        }
+                        alt={item?.products?.name || "Product"}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
                     </div>
@@ -198,37 +216,31 @@ function Cart() {
                     {/* Product Details */}
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
                       <div>
-                        <p className="text-xs text-violet-400 mb-2">
-                          {item.category}
-                        </p>
-
                         <h3 className="text-base sm:text-xl font-semibold leading-snug">
-                          {item.name}
+                          {item?.products?.name}
                         </h3>
+
+                        <p className="text-xs text-violet-400 mb-2 line-clamp-2">
+                          {item?.products?.discription}
+                        </p>
 
                         <div className="flex flex-wrap items-center gap-2 mt-3">
                           <span className="text-lg font-bold">
-                            {formatPrice(item.price)}
-                          </span>
-
-                          <span className="text-sm text-gray-500 line-through">
-                            {formatPrice(item.oldPrice)}
-                          </span>
-
-                          <span className="text-xs text-emerald-400">
-                            Save {formatPrice(item.oldPrice - item.price)}
+                            {formatPrice(item?.products?.price)}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between gap-2 mt-5">
-
                         {/* Quantity Controls */}
                         <div className="flex items-center gap-3 bg-[#191920] border border-white/10 rounded-xl p-1">
                           <button
-                            onClick={() => updateQuantity(item.id, -1)}
-                            aria-label={`Decrease ${item.name} quantity`}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition"
+                            onClick={() =>
+                              handleDecrease(item.id, item.quantity)
+                            }
+                            disabled={Number(item.quantity) <= 1}
+                            aria-label={`Decrease ${item?.products?.name} quantity`}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             <Minus size={15} />
                           </button>
@@ -238,8 +250,10 @@ function Cart() {
                           </span>
 
                           <button
-                            onClick={() => updateQuantity(item.id, 1)}
-                            aria-label={`Increase ${item.name} quantity`}
+                            onClick={() =>
+                              handleIncrease(item.id, item.quantity)
+                            }
+                            aria-label={`Increase ${item?.products?.name} quantity`}
                             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-violet-500/20 text-violet-400 transition"
                           >
                             <Plus size={15} />
@@ -248,7 +262,7 @@ function Cart() {
 
                         {/* Remove Item */}
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => handleRemove(item.id)}
                           className="flex items-center gap-1.5 text-gray-400 hover:text-red-400 transition text-sm"
                         >
                           <Trash2 size={16} />
@@ -265,7 +279,10 @@ function Cart() {
                     </span>
 
                     <span className="font-semibold">
-                      {formatPrice(item.price * item.quantity)}
+                      {formatPrice(
+                        Number(item?.products?.price || 0) *
+                          Number(item?.quantity || 1),
+                      )}
                     </span>
                   </div>
                 </div>
@@ -298,16 +315,12 @@ function Cart() {
             {/* Order Summary */}
             <aside className="lg:col-span-1">
               <div className="lg:sticky lg:top-24 bg-[#101014] border border-white/10 rounded-2xl p-5 sm:p-6">
-                <h2 className="text-xl font-bold mb-6">
-                  Order Summary
-                </h2>
+                <h2 className="text-xl font-bold mb-6">Order Summary</h2>
 
                 <div className="space-y-4 text-sm">
                   <div className="flex justify-between gap-3 text-gray-400">
                     <span>Subtotal</span>
-                    <span className="text-white">
-                      {formatPrice(subtotal)}
-                    </span>
+                    <span className="text-white">{formatPrice(subtotal)}</span>
                   </div>
 
                   <div className="flex justify-between gap-3 text-gray-400">
@@ -324,7 +337,11 @@ function Cart() {
                   <div className="flex justify-between gap-3 text-gray-400">
                     <span>Delivery Charges</span>
 
-                    <span className={delivery === 0 ? "text-emerald-400" : "text-white"}>
+                    <span
+                      className={
+                        delivery === 0 ? "text-emerald-400" : "text-white"
+                      }
+                    >
                       {delivery === 0 ? "FREE" : formatPrice(delivery)}
                     </span>
                   </div>
@@ -352,7 +369,7 @@ function Cart() {
 
                 <button
                   onClick={handleCheckout}
-                  disabled={cartItems.length === 0}
+                  disabled={userCartData.length === 0}
                   className="w-full mt-7 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-500 active:scale-[0.98] transition font-semibold shadow-lg shadow-violet-900/20 disabled:opacity-50"
                 >
                   <ShoppingCart size={18} />
@@ -369,10 +386,10 @@ function Cart() {
         )}
       </div>
 
-      {/* ORDER SUCCESS POPUP */}
+      {/* Order Success Popup */}
       {orderPlaced && placedOrder && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-[promoFade_0.3s_ease-out]"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="order-success-title"
@@ -396,9 +413,7 @@ function Cart() {
           </div>
 
           {/* Popup Card */}
-          <div className="relative w-full max-w-md bg-[#101014] border border-violet-500/30 rounded-3xl p-6 sm:p-9 text-center shadow-2xl shadow-violet-950/40 animate-[successPop_0.45s_ease-out]">
-
-            {/* Close Button */}
+          <div className="relative w-full max-w-md bg-[#101014] border border-violet-500/30 rounded-3xl p-6 sm:p-9 text-center shadow-2xl shadow-violet-950/40">
             <button
               onClick={closeOrderPopup}
               aria-label="Close order confirmation"
@@ -438,8 +453,8 @@ function Cart() {
             </h2>
 
             <p className="text-gray-400 text-sm leading-6 mb-6">
-              Woohoo! Your order has been placed successfully.
-              Thank you for shopping with us!
+              Woohoo! Your order has been placed successfully. Thank you for
+              shopping with us!
             </p>
 
             {/* Order Details */}
@@ -455,16 +470,11 @@ function Cart() {
 
               <div className="flex justify-between gap-3 text-sm">
                 <span className="text-gray-400">Total items</span>
-
-                <span className="font-medium">
-                  {placedOrder.quantity}
-                </span>
+                <span className="font-medium">{placedOrder.quantity}</span>
               </div>
 
               <div className="border-t border-white/10 pt-3 flex justify-between gap-3 items-center">
-                <span className="text-gray-300 font-medium">
-                  Amount paid
-                </span>
+                <span className="text-gray-300 font-medium">Amount paid</span>
 
                 <span className="text-xl font-bold text-violet-400">
                   {formatPrice(placedOrder.total)}
@@ -483,8 +493,8 @@ function Cart() {
               </button>
 
               <button
-                onClick={() => {
-                  closeOrderPopup();
+                onClick={async () => {
+                  await closeOrderPopup();
                   window.location.href = "/";
                 }}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition font-semibold"

@@ -10,12 +10,31 @@ import {
   ArrowRight,
 } from "lucide-react";
 import SupportModal from "../pages/SupportModal";
+import { useEffect } from "react";
+import { useCartStore } from "../store/cartStore";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [isSupportOpen, setIsSupportOpen] = useState(false);
+  const userCartData = useCartStore((state)=> state.userCartData);
+  
+  const getCartByUserId  = useCartStore((state)=> state.getCartByUserId );
+  const profile = JSON.parse(localStorage.getItem("profile"));
+  
+  useEffect(() => {
+    if (profile) {
+      try {
+        if (profile?.result?.id) {
+          getCartByUserId(profile?.result?.id);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
 
@@ -93,7 +112,6 @@ const Navbar = () => {
               className="flex items-center gap-2 rounded-full border border-white/10 bg-[#101014] px-4 py-2.5 text-sm text-gray-300 hover:border-violet-500/40 hover:text-violet-300 transition"
             >
               <Headset size={18} />
-              
             </button>
             <SupportModal
               isOpen={isSupportOpen}
@@ -120,7 +138,7 @@ const Navbar = () => {
               <ShoppingCart size={22} />
 
               <span className="absolute right-0.5 top-0.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-violet-500 px-1 text-[10px] font-bold text-white ring-2 ring-[#101014]">
-                3
+                {userCartData.length}
               </span>
             </a>
 
@@ -169,17 +187,16 @@ const Navbar = () => {
                 Shop
               </a>
 
-         <button
-              onClick={() => setIsSupportOpen(true)}
-              className="flex items-center gap-2 rounded-full border border-white/10 bg-[#101014] px-4 py-2.5 text-sm text-gray-300 hover:border-violet-500/40 hover:text-violet-300 transition"
-            >
-              <Headset size={18} />
-          
-            </button>
-            <SupportModal
-              isOpen={isSupportOpen}
-              onClose={() => setIsSupportOpen(false)}
-            />
+              <button
+                onClick={() => setIsSupportOpen(true)}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-[#101014] px-4 py-2.5 text-sm text-gray-300 hover:border-violet-500/40 hover:text-violet-300 transition"
+              >
+                <Headset size={18} />
+              </button>
+              <SupportModal
+                isOpen={isSupportOpen}
+                onClose={() => setIsSupportOpen(false)}
+              />
             </div>
           </div>
         )}

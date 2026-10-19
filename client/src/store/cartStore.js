@@ -28,9 +28,10 @@ export const useCartStore = create((set) => ({
 
   getCartByUserId: async (id) => {
     try {
-      const { data } = await axios.get(`${API_URL}/${id}`);
+      const { data } = await axios.get(`${API_URL}`);
 
       const filterData = data.filter((item) => item?.userId == id);
+
       set({ userCartData: filterData });
     } catch (error) {
       console.log(error);
@@ -61,9 +62,9 @@ export const useCartStore = create((set) => ({
     }
   },
 
-  updateCart: async (data, id) => {
+  updateCart: async (id, data) => {
     try {
-      const response = await axios.put(data, `${API_URL}/${id}`);
+      const response = await axios.put(`${API_URL}/${id}`, data);
 
       set((state) => ({
         cart: state.cart.map((item) =>

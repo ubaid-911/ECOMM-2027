@@ -21,6 +21,7 @@ import PromoHero from "../components/PromoHero";
 import { useProductsStore } from "../store/productsStore";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loder";
+import { useCartStore } from "../store/cartStore";
 
 // const product = {
 //   id: 1,
@@ -104,9 +105,14 @@ const ProductDetails = () => {
   const [cart, setCart] = useState([]);
   const [addedProduct, setAddedProduct] = useState(null);
 
+
   const { id } = useParams();
   const singleProducts = useProductsStore((state) => state.singleProducts);
   const getProductsById = useProductsStore((state) => state.getProductsById);
+
+  const userData = JSON.parse(localStorage.getItem("profile"))
+  const createCart = useCartStore((state)=> state.createCart)
+
   useEffect(() => {
     if (id) {
       getProductsById(id);
@@ -120,8 +126,19 @@ const ProductDetails = () => {
     }).format(price);
 
   const addToCart = (item, qty = 1) => {
+
+    console.log("start")
     setCart((prev) => [...prev, ...Array(qty).fill(item.id)]);
     setAddedProduct(item.id);
+
+    const cartData = {
+      "productId":id,
+      "userId":userData?.result?.id,
+      "quantity":1
+
+    }
+
+    createCart(cartData);
 
     setTimeout(() => {
       setAddedProduct((prev) => (prev === item.id ? null : prev));
